@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cabas — Tes courses de la semaine dans ton budget</title>
+<meta name="description" content="Donne ton budget et le nombre de personnes : Cabas te prépare les menus et la liste de courses par rayon, avec le total estimé. 9 € par mois, sans engagement.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cabas — Tes courses de la semaine dans ton budget">
+<meta property="og:description" content="Menus, liste de courses par rayon et total estimé, calculés pour ton budget. 9 € par mois, sans engagement.">
+<meta property="og:locale" content="fr_FR">
+<meta name="theme-color" content="#1F3FFF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bleu:#1F3FFF;
+  --beurre:#FFD84A;
+  --encre:#101A4A;
+  --fond:#F4F6F8;
+  --papier:#FFFFFF;
+  --gris:#5A6280;
+  --titre:"Bricolage Grotesque","Arial Black",system-ui,sans-serif;
+  --texte:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --ticket:ui-monospace,"SF Mono","Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--texte);color:var(--encre);background:var(--fond);line-height:1.55;font-size:17px;padding-bottom:84px}
+.wrap{max-width:640px;margin:0 auto;padding:0 20px}
+h1,h2{font-family:var(--titre);font-weight:800;line-height:1.05;letter-spacing:-.02em}
+h1{font-size:clamp(2.3rem,9.5vw,3.6rem)}
+h2{font-size:clamp(1.6rem,6vw,2.1rem);margin-bottom:14px}
+p+p{margin-top:12px}
+
+.hero{background:var(--bleu);color:#fff;padding:36px 0 56px}
+.marque{font-family:var(--titre);font-weight:800;font-size:1.3rem;margin-bottom:28px}
+.hero p.sous{font-size:1.15rem;margin-top:18px;max-width:32ch;color:#E6EAFF}
+.btn{display:block;text-align:center;background:var(--beurre);color:var(--encre);font-family:var(--titre);font-weight:800;font-size:1.2rem;text-decoration:none;padding:18px 22px;border-radius:14px;min-height:56px}
+.btn:focus-visible{outline:3px solid var(--encre);outline-offset:3px}
+.hero .btn{margin-top:26px}
+.mention{font-size:.92rem;margin-top:10px;color:#E6EAFF;text-align:center}
+
+.ticket-zone{margin-top:-30px}
+.ticket{background:var(--papier);font-family:var(--ticket);font-size:.95rem;padding:22px 20px 26px;border-radius:4px;transform:rotate(-1.2deg);box-shadow:0 10px 0 var(--beurre);border-bottom:3px dashed var(--encre)}
+.ticket header{border-bottom:2px dashed var(--encre);padding-bottom:12px;margin-bottom:12px}
+.ticket .ex{font-size:.8rem;color:var(--gris)}
+.ticket .l{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.ticket .tot{border-top:2px dashed var(--encre);margin-top:10px;padding-top:10px;font-weight:700}
+.ticket .reste{background:var(--beurre);padding:6px 8px;margin-top:8px;font-weight:700}
+
+section{padding:48px 0 0}
+.douleur{font-size:1.2rem}
+.douleur strong{background:var(--beurre);padding:0 4px}
+.benef{list-style:none;padding:0}
+.benef li{padding:16px 0;border-top:2px solid var(--encre)}
+.benef li:last-child{border-bottom:2px solid var(--encre)}
+.benef b{font-family:var(--titre);font-size:1.15rem;display:block}
+
+.prix{background:var(--papier);border:3px solid var(--encre);border-radius:18px;padding:24px 20px;margin-top:8px}
+.prix .montant{font-family:var(--titre);font-weight:800;font-size:3rem;line-height:1}
+.prix .montant small{font-size:1.1rem;font-weight:700}
+.prix .jour{color:var(--gris);margin-top:4px}
+.prix .btn{margin-top:18px;background:var(--bleu);color:#fff}
+.prix .btn:focus-visible{outline-color:var(--beurre)}
+.prix .sans{font-weight:700;margin-top:12px;text-align:center}
+.garantie{margin-top:20px;padding:16px;background:var(--fond);border-left:6px solid var(--bleu);font-size:.98rem}
+
+details{border-top:2px solid var(--encre);padding:14px 0}
+details:last-of-type{border-bottom:2px solid var(--encre)}
+summary{font-family:var(--titre);font-weight:700;font-size:1.1rem;cursor:pointer;list-style:none;padding-right:28px;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:0;top:-2px;font-size:1.5rem;color:var(--bleu)}
+details[open] summary::after{content:"–"}
+details p{margin-top:10px;color:#2B3566}
+
+footer{padding:40px 0 20px;color:var(--gris);font-size:.9rem}
+
+.barre{position:fixed;left:0;right:0;bottom:0;background:var(--papier);border-top:3px solid var(--encre);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
+.barre .btn{background:var(--bleu);color:#fff;padding:14px 18px;min-height:52px;font-size:1.1rem}
+@media(min-width:760px){
+  body{padding-bottom:0}
+  .barre{display:none}
+  .hero .btn{display:inline-block}
+}
+@media(prefers-reduced-motion:no-preference){
+  .ticket{animation:pose .5s ease-out both}
+  @keyframes pose{from{transform:rotate(-4deg) translateY(14px);opacity:0}to{transform:rotate(-1.2deg);opacity:1}}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="marque">Cabas</div>
+    <h1>Tes courses de la semaine tiennent dans ton budget.</h1>
+    <p class="sous">Donne ton budget et le nombre de personnes. Tu reçois les menus et la liste de courses, rayon par rayon.</p>
+    <a class="btn" href="https://buy.stripe.com/test_fZuaEWadX7xgeib8hd4c800">Recevoir mon plan de la semaine</a>
+    <p class="mention">9 € par mois · sans engagement, résiliable à tout moment</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="ticket-zone">
+    <div class="ticket" role="img" aria-label="Exemple de liste de courses pour 2 personnes avec un budget de 45 euros, total estimé 40,50 euros">
+      <header>
+        <strong>CABAS · LISTE DE LA SEMAINE</strong><br>
+        <span class="ex">Exemple : 2 personnes, 45 € de budget</span>
+      </header>
+      <div class="l"><span>Épicerie</span><span>10,25 €</span></div>
+      <div class="l"><span>Frais</span><span>17,65 €</span></div>
+      <div class="l"><span>Fruits et légumes</span><span>12,60 €</span></div>
+      <div class="l tot"><span>Total estimé</span><span>40,50 €</span></div>
+      <div class="l reste"><span>Reste reporté</span><span>4,50 €</span></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Le problème, ce n’est pas ta volonté.</h2>
+    <p class="douleur">On fait les courses sans plan, on dépasse le budget de <strong>plusieurs dizaines d’euros par semaine</strong>, et une partie finit à la poubelle.</p>
+    <p>Organiser sept repas autour d’un budget prend une heure que personne ne prend. Cabas la prend pour toi.</p>
+  </section>
+
+  <section>
+    <h2>Ce que tu reçois</h2>
+    <ul class="benef">
+      <li><b>Des menus qui respectent ton budget</b>Adaptés au nombre de personnes et à ce qu’il te reste au frigo.</li>
+      <li><b>Une liste rangée par rayon</b>Tu avances dans le magasin sans revenir en arrière, avec le total estimé.</li>
+      <li><b>Le reste reporté</b>Ce que tu n’as pas dépensé passe à la semaine suivante.</li>
+    </ul>
+  </section>
+
+  <section id="prix">
+    <h2>Un seul abonnement</h2>
+    <div class="prix">
+      <div class="montant">9 €<small> / mois</small></div>
+      <p class="jour">Soit 0,30 € par jour, pour tout le foyer.</p>
+      <a class="btn" href="https://buy.stripe.com/test_fZuaEWadX7xgeib8hd4c800">Recevoir mon plan de la semaine</a>
+      <p class="sans">Sans engagement, résiliable à tout moment.</p>
+      <p class="garantie"><strong>Satisfait ou remboursé pendant 14 jours.</strong> Si Cabas ne te convient pas, écris à sampieri.reno@gmail.com dans les 14 jours après ton paiement : tu es remboursé sous 5 jours ouvrés, sans question.</p>
+    </div>
+    <p style="margin-top:16px">Après ton paiement, tu m’envoies ton budget et le nombre de personnes. Ton premier plan arrive par email sous 24 h.</p>
+  </section>
+
+  <section>
+    <h2>Questions fréquentes</h2>
+    <details><summary>Est-ce que ça marche pour mon foyer ?</summary><p>Oui si tu fais tes courses pour 1 à 6 personnes. Tu précises ton budget, ce qu’il te reste et ce que tu ne manges pas.</p></details>
+    <details><summary>Combien de temps ça me prend ?</summary><p>Une minute pour donner ton budget et ton nombre de personnes. Le reste, c’est nous.</p></details>
+    <details><summary>Et si je veux arrêter ?</summary><p>Tu résilies quand tu veux, sans justification. Et pendant 14 jours après ton paiement, tu peux te faire rembourser.</p></details>
+    <details><summary>À quoi sert exactement ce que je paie ?</summary><p>À recevoir chaque semaine des menus et une liste de courses calculés pour ton budget, avec le reste reporté à la semaine suivante.</p></details>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Cabas · [RAISON SOCIALE À COMPLÉTER] · SIRET [À COMPLÉTER]</p>
+    <p>Mentions légales, conditions générales de vente et politique de confidentialité : à ajouter avant l’ouverture au public.</p>
+  </div>
+</footer>
+
+<div class="barre"><a class="btn" href="https://buy.stripe.com/test_fZuaEWadX7xgeib8hd4c800">Recevoir mon plan · 9 €/mois</a></div>
+
+</body>
+</html>
